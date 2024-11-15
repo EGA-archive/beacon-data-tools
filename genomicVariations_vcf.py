@@ -247,11 +247,18 @@ def generate(dict_properties):
             if conf.case_level_data == True:
                 j=0
                 biosampleids=[]
-                for zygo in v.gt_types:
-                    if zygo==True:
-                        biosampleids.append(str(j))
+                for zygo in v.genotypes:
+                    if zygo[0] == 1 and zygo[1]== 1:
+                        new_id=str(j)+'_0'
+                        biosampleids.append(new_id)
                         j+=1
-                    else:
+                    elif zygo[0] == 1 and zygo[1]== 0:
+                        new_id=str(j)+'_1'
+                        biosampleids.append(new_id)
+                        j+=1
+                    elif zygo[0] == 0 and zygo[1]== 1:
+                        new_id=str(j)+'_2'
+                        biosampleids.append(new_id)
                         j+=1
                 
                 #dict_to_xls['caseLevelData|biosampleId'] = 'hola'
@@ -641,7 +648,7 @@ def generate(dict_properties):
                         client.beacon.caseLevelData.insert_many(total_dict2)
                         pbar.update(1)
                         break
-                    elif (i/10000).is_integer():
+                    elif (i/10).is_integer():
                         client.beacon.caseLevelData.insert_many(total_dict2)
                         del biosampleids
                         del total_dict2
